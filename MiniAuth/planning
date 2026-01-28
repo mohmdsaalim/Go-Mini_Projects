@@ -1,0 +1,12 @@
+Focus studying with the folder structure
+
+mini-auth/
+├── cmd/main.go
+├── controllers/auth_controller.go
+├── services/auth_service.go
+├── repositories/user_repository.go
+├── middlewares/auth_middleware.go
+├── models/user.go
+├── routes/routes.go
+├── config/database.go
+├── utils/jwt.go
