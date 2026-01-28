@@ -8,19 +8,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-
-
-
-type RegisterRequest struct {
-	Name     string `json:"name" binding:"required"`
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=6"`
-}
-
-type LoginRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required"`
-}
 type AuthController struct {
 	Service *services.AuthService
 }
@@ -37,7 +24,7 @@ type AuthController struct {
 // }
 
 func (c *AuthController) Register(ctx *gin.Context) {
-	var req RegisterRequest
+	var req models.RegisterRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -76,7 +63,7 @@ func (c *AuthController) Register(ctx *gin.Context) {
 // 	ctx.JSON(200, gin.H{"token":token,})
 // }
 func (c *AuthController) Login(ctx *gin.Context) {
-	var req LoginRequest
+	var req models.LoginRequest
 
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
