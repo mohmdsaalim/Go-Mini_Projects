@@ -1,42 +1,52 @@
 package engine
 
-import (
-    "time"
-)
+import "time"
 
 type Scheduler struct {
-    Queue *TaskQueue
+	queue      *TaskQueue
+	addTaskCh  chan *Task
 }
 
 func NewScheduler() *Scheduler {
-    return &Scheduler{
-        Queue: &TaskQueue{},
-    }
+	return &Scheduler{
+		queue:     &TaskQueue{},
+		addTaskCh: make(chan *Task),
+	}
 }
 
 func (s *Scheduler) Start() {
-    go func() {
-        println("🟢 Scheduler started")
+	go func() {
+		println("Scheduler started")
 
-        for {
-            task := s.Queue.Head
-            if task == nil {
-                time.Sleep(1 * time.Second)
-                continue
-            }
+		for {
+			// If no task, wait for new one
+			if s.queue.Head == nil {
+				task := <-s.addTaskCh
+				s.queue.Add(task)
+				continue
+			}
 
-            println("⏳ Waiting for task:", task.RunAt.String())
+			nextTask := s.queue.Head
+			waitTime := time.Until(nextTask.RunAt)
 
-            now := time.Now()
-            if now.Before(task.RunAt) {
-                time.Sleep(task.RunAt.Sub(now))
-            }
+			select {
+			case task := <-s.addTaskCh:
+				// new task arrived → add & re-evaluate
+				s.queue.Add(task)
 
-            task = s.Queue.Pop()
-            if task != nil && task.Action != nil {
-                println("🚀 Executing task")
-                task.Action()
-            }
-        }
-    }()
+			case <-time.After(waitTime):
+				// time to execute
+				task := s.queue.Pop()
+				if task != nil && task.Action != nil {
+					println(" Executing task")
+					task.Action()
+				}
+			}
+		}
+	}()
+}
+
+// exposed method (API uses this)
+func (s *Scheduler) Schedule(task *Task) {
+	s.addTaskCh <- task
 }
