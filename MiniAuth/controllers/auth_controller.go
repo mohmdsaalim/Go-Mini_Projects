@@ -12,17 +12,6 @@ type AuthController struct {
 	Service *services.AuthService
 }
 
-// func (c *AuthController) Register(ctx *gin.Context) {
-// 	var user models.User
-// 	ctx.ShouldBindJSON(&user)
-
-// 	if err := c.Service.Register(&user); err != nil{
-// 		ctx.JSON(http.StatusBadRequest, gin.H{"error":err.Error()})
-// 		return
-// 	}
-// 	ctx.JSON(200, gin.H{"message":"registered succesfully"})
-// }
-
 func (c *AuthController) Register(ctx *gin.Context) {
 	var req models.RegisterRequest
 
@@ -47,21 +36,8 @@ func (c *AuthController) Register(ctx *gin.Context) {
 	})
 }
 
-// func (c AuthController) Login(ctx *gin.Context) {
-// 	var req struct{
-// 		Email string `json:"email"`
-// 		Password string `json:"password"`
-// 	}
-// 	ctx.ShouldBindJSON(&req)
 
-// 	user, err := c.Service.Login(req.Email, req.Password)
-// 	if err != nil {
-// 		ctx.JSON(http.StatusUnauthorized, gin.H{"error":err.Error()})
-// 		return
-// 	}
-// 	token, _ := utils.GenerateToken(user.ID)
-// 	ctx.JSON(200, gin.H{"token":token,})
-// }
+
 func (c *AuthController) Login(ctx *gin.Context) {
 	var req models.LoginRequest
 

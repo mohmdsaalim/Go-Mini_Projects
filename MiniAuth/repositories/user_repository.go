@@ -25,3 +25,5 @@ func (r *UserRepository) FindByID(id uint) (*models.User, error) {
 	err := r.DB.First(&user, id).Error
 	return &user, err
 }
+
+// db connections full in repo
