@@ -11,11 +11,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+
 )
 
 
 
 func main() {
+	// laod env 
 	if err := godotenv.Load();  err != nil{
 		log.Fatal("error loading .env failed")
 	}

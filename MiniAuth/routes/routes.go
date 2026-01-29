@@ -13,5 +13,5 @@ func RegisterRoutes(r *gin.Engine, c *controllers.AuthController)  {
 
 	auth := r.Group("/profile")
 	auth.Use(middlewares.AuthMiddleware())
-	auth.GET("", c.Profile)
+	auth.GET("/profile", c.Profile)
 }

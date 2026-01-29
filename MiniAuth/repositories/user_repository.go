@@ -10,7 +10,7 @@ type UserRepository struct {
 	DB *gorm.DB
 }
 
-func (r UserRepository) Create(user *models.User) error{
+func (r *UserRepository) Create(user *models.User) error{
 	return r.DB.Create(user).Error
 }
 
